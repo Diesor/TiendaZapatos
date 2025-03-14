@@ -15,6 +15,7 @@ carrito.forEach((producto, index) => {
             <input type="number" class="carrito-cantidad" value="1" min="1" data-index="${index}">
         </div>
         <span class="carrito-precio">$${producto.precio.toFixed(2)}</span>
+        <button class="eliminar-producto" data-index="${index}">X</button>
     `;
 
     listaCarrito.appendChild(item);
@@ -31,8 +32,8 @@ document.querySelectorAll(".cantidad-btn").forEach(btn => {
 
         if (e.target.classList.contains("aumentar")) {
             cantidad++;
-        } else if (e.target.classList.contains("disminuir") && cantidad > 1) {
-            cantidad--;
+        } else if (e.target.classList.contains("disminuir")) {
+            cantidad = Math.max(1, cantidad - 1); // Evita que sea menor a 1
         }
 
         input.value = cantidad;
@@ -41,7 +42,21 @@ document.querySelectorAll(".cantidad-btn").forEach(btn => {
 });
 
 document.querySelectorAll(".carrito-cantidad").forEach(input => {
-    input.addEventListener("input", actualizarSubtotal);
+    input.addEventListener("input", (e) => {
+        if (parseInt(e.target.value) < 1 || isNaN(e.target.value)) {
+            e.target.value = 1;
+        }
+        actualizarSubtotal();
+    });
+});
+
+document.querySelectorAll(".eliminar-producto").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        let index = e.target.dataset.index;
+        carrito.splice(index, 1);
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        location.reload(); // Recargar la página para reflejar cambios
+    });
 });
 
 function actualizarSubtotal() {
