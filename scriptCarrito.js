@@ -65,17 +65,13 @@ document.getElementById("confirmar-compra").addEventListener("click", () => {
         }
     });
 
-    // Guardar productos con stock actualizado
     localStorage.setItem("productos", JSON.stringify(productos));
 
-    // Vaciar el carrito
     localStorage.removeItem("carrito");
 
-    // Redirigir al index con mensaje de confirmación
     window.location.href = "index.html?compra=exitosa";
 });
 
-// MOSTRAR MENSAJE SI LA COMPRA SE CONFIRMÓ
 document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("compra") === "exitosa") {
